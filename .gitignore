@@ -1,0 +1,9 @@
+*.pyc
+.Python
+bin/
+include/
+lib/
+*.egg-info/
+dist/
+build/
+agent.pgep.ini
