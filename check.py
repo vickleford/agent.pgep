@@ -71,9 +71,13 @@ def select_one(**kwargs):
 
 
 def spawn():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('profile', 
+                        help='Profile name from config to use for connection')
+    args = parser.parse_args()
     config = get_config()
     
     result = select_one(**config['local'])
     
     print("status OK")
-    print("metric select_one int32 {0}".format(result))
+    print("metric select_one int32 {0}".format(args.profile))
