@@ -33,7 +33,7 @@ def die(why):
 
 
 def get_config():
-    '''Return a config dict or None if no config file.'''
+    '''Return a config dict or bomb if no config file.'''
     
     locations = ['/etc/agent.pgep.ini', 'agent.pgep.ini']
     
@@ -48,12 +48,12 @@ def get_config():
 
 
 def select_one(**kwargs):
-    '''Return a string describing whether you could select 1.
+    '''Return what you get when you select 1.
     
-    psycopg2 follows PEP 249 so parameters can be seen in the footnotes at
+    psycopg2 follows PEP 249 so kwargs can be seen in the footnotes at
     http://www.python.org/dev/peps/pep-0249/#id40
     
-    Also see basic connection parameters defined at:
+    Also see basic connection parameters (kwargs here) defined at:
     http://initd.org/psycopg/docs/module.html#psycopg2.connect
     
     (These constitute what you can put in the config file.)
@@ -66,6 +66,9 @@ def select_one(**kwargs):
         result = cur.fetchone()
     except Exception as e:
         die(e)
+    finally:
+        cur.close()
+        conn.close()
         
     return result[0]
 
@@ -77,7 +80,9 @@ def spawn():
     args = parser.parse_args()
     config = get_config()
     
-    result = select_one(**config['local'])
+    result = select_one(**config[args.profile])
     
     print("status OK")
-    print("metric select_one int32 {0}".format(args.profile))
+    print("metric select_one int32 {0}".format(result))
+    # add metrics for time to connect 
+    # add metrics for time to complete
