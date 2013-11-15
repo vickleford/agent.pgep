@@ -76,6 +76,14 @@ class PostgresEndpoint(object):
         return td.microseconds / 100
 
 
+def die(why):
+    '''Describe what happened and bomb out.'''
+    
+    msg = str(why).replace('\n', '')
+    print("status {0}".format(msg))
+    exit(1)
+    
+
 def get_config():
     '''Return a config dict or bomb if no config file.'''
     
@@ -110,6 +118,4 @@ def spawn():
         print("metric tt_connect int32 {0}".format(tt_connect))
         print("metric tt_complete int32 {0}".format(tt_complete))
     except Exception as e:
-        msg = str(e).replace('\n', ' ')
-        print("status {0}".format(msg))
-        exit(1)
+        die(e)
